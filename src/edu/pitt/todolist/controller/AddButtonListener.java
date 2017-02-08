@@ -3,6 +3,8 @@ package edu.pitt.todolist.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JComboBox;
+
 public class AddButtonListener implements ActionListener {
 	Controller controller;
 	
@@ -12,9 +14,17 @@ public class AddButtonListener implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		String desc = controller.getView().getInput().getText();
-		controller.getModel().addListItem(desc);
-		controller.getModel().addListItemToDB(desc);
-		controller.getView().addToList(desc);
-		controller.getView().getInput().setText("");
+		String name = controller.getView().getUserName();
+		
+		int userid = controller.getView().getUserID();
+		
+		controller.getView().addTaskToList(name, desc); // Add selected name + input task to List panel
+		controller.getModel().addListItemToDB(desc) ;// Add input task to DB.task table 
+		int taskid = controller.getModel().addListItemToDB(desc);
+		controller.getModel().addTaskUserToDB(taskid, userid); // Add input task id + selected name id into DB.user_task table
+		
+		
+		
+		controller.getView().getInput().setText(""); // reset the input textfield
     }
 }

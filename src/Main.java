@@ -8,7 +8,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		Model model = new Model();
-		View frame = new View(model.getList());
+		View frame = new View(model.getNameList());
 		Controller controller = new Controller(frame, model);
 		
 		

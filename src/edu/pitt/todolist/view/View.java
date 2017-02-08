@@ -3,60 +3,75 @@ package edu.pitt.todolist.view;
 import java.awt.Dimension;
 import java.awt.List;
 import java.awt.TextField;
+import java.util.HashMap;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import edu.pitt.todolist.controller.Controller;
 import edu.pitt.todolist.model.ListItem;
+import edu.pitt.todolist.model.User;
 
 public class View {
 	private JFrame window;
 	private JButton addButton;
 	private JButton deleteButton;
-	private List todoList;
+	private List userTaskList;
 	private TextField textField;
+	private JComboBox<String> userName;
 	
 	// add param list -> default list
-	public View(Vector<ListItem> defaultList) {
+	public View(HashMap<Integer, User> userList) {
 		window = new JFrame("ToDoList");
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 
 	    JPanel listPanel = new JPanel();
 	    
-	    todoList = new List(20,true);
+	    userTaskList = new List(20,true);
 	    // add item here
-	    // todoList.add(defaultList.elementAt(0).getDescription());
-	    for (int i = 0; i < defaultList.size();i++){
-	    	todoList.add(defaultList.get(i).getDescription());
-	    }
 	    
-	    todoList.setSize(300,400);
+//	    for (int i = 0; i < defaultList.size();i++){
+//	    	todoList.add(defaultList.get(i).getDescription());
+//	    }
+	    
+	    userTaskList.setSize(300,400);
 	    listPanel.setBounds(400,50, 250, 300);
-	    listPanel.add(todoList);
+	    listPanel.add(userTaskList);
 	    
 	    panel.add(listPanel);
 	    panel.setBounds(0,0,700,500);
+	    
+	    JLabel label1 = new JLabel("Please select users here: ");
+	    label1.setBounds(100, 50, 250, 40);
+	    panel.add(label1);
+	    JComboBox<String> userName = new JComboBox<String>();
+	    userName.setBounds(100, 100, 250, 40);
+	    userName.addItem("----Select Users----");
+	    for(User user : userList.values()){
+	    	userName.addItem(user.getID() + "-" + user.getFirstName() + " " + user.getLastName());
+	    }
+	    panel.add(userName);
 
-		JLabel label = new JLabel("Please enter item here:");
-		label.setBounds(100, 50, 250, 40);
-		panel.add(label);
+		JLabel label2 = new JLabel("Please enter item here:");
+		label2.setBounds(100, 150, 250, 40);
+		panel.add(label2);
 		textField = new TextField("");
-		textField.setBounds(100,100,250,40);
+		textField.setBounds(100,200,250,40);
 		panel.add(textField);
 
 		addButton = new JButton();
 		addButton.setText("Add Items");
-		addButton.setBounds(100, 200, 250, 40);
+		addButton.setBounds(100, 280, 250, 40);
 		panel.add(addButton);
 	    
 		deleteButton = new JButton();
 		deleteButton.setText("Delete Items");
-		deleteButton.setBounds(100,300,250,40);
+		deleteButton.setBounds(100,360,250,40);
 		panel.add(deleteButton);
 	    
 		window.add(panel);
@@ -74,28 +89,43 @@ public class View {
 		return deleteButton;
 	}
 
-	public List getTodoList() {
-		return todoList;
+	public List getUserTaskList() {
+		return userTaskList;
 	}
 
 	public TextField getInput() {
 		return textField;
 	}
+	
+	public String getUserName() {
+		String selectedString = (String) this.userName.getModel().getSelectedItem();
+		return selectedString.split("-")[1];
+	}
+	
+	public Integer getUserID() {
+		String selectedString = (String) this.userName.getModel().getSelectedItem();
+		return new Integer(selectedString.split("-")[0]);
+	}
 
-	public void addToList(String description) {
-		todoList.add(description);
+	public void addTaskToList(String name,String description) {
+		//userTaskList.add(description);
+		userTaskList.add(name + ": " + description);
+	}
+	
+	public void addTaskToList(String description) {
+		userTaskList.add(description);
 	}
 
 	public void removeFromList(Vector<String> selectedItems) {
 		Vector<String> list = new Vector<String>();
-		for (String listItem : todoList.getItems()) {
+		for (String listItem : userTaskList.getItems()) {
 			if (!selectedItems.contains(listItem)) {
 				list.add(listItem);
 			}
 		}
-		todoList.removeAll();
+		userTaskList.removeAll();
 		for (String item : list) {
-			todoList.add(item);
+			userTaskList.add(item);
 		}
 	}
 }
