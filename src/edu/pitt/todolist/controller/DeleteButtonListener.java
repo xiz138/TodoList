@@ -13,14 +13,15 @@ public class DeleteButtonListener implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		String[] selectedItems = controller.getView().getUserTaskList().getSelectedItems();
-		//int [] selectedTaskID = controller.getView().getUserTaskList().getSelectedItem()
-		int taskID;
+		String selectedTask = controller.getView().getSelectedTask();
+		int selectedTaskID = controller.getModel().getSelectedTaskID(selectedTask) + 1;
+		
+		controller.getModel().deleteTaskUserFromDB(selectedTaskID); // Delete task_id from DB.task_user Table
+		controller.getModel().deleteListItemFromDB(selectedTask);
+		
 		Vector<String> selectedItemVector = new Vector<String>();
 		for (String selectedItem : selectedItems) {
-			controller.getModel().deleteListItem(selectedItem);
-			controller.getModel().deleteListItemFromDB(selectedItem); 
-			//Delete task_id from DB.task_user Table
-			controller.getModel().deleteTaskUserFromDB(taskID);
+			controller.getModel().deleteListItem(selectedItem);		
 			selectedItemVector.add(selectedItem);
 		}
 		controller.getView().removeFromList(selectedItemVector);

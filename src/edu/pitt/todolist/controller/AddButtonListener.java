@@ -13,14 +13,15 @@ public class AddButtonListener implements ActionListener {
 	}
 	
 	public void actionPerformed(ActionEvent e) {
+		
 		String desc = controller.getView().getInput().getText();
 		String name = controller.getView().getUserName();
 		
+		int taskid = controller.getModel().getAddedTaskID();
 		int userid = controller.getView().getUserID();
 		
-		controller.getView().addTaskToList(name, desc); // Add selected name + input task to List panel
-		controller.getModel().addListItemToDB(desc) ;// Add input task to DB.task table 
-		int taskid = controller.getModel().addListItemToDB(desc);
+		controller.getModel().addListItemToDB(desc);// Add input task to DB.ToDoList table 	
+		controller.getView().addTaskToList(name, desc); // Add selected name + input task to List panel		
 		controller.getModel().addTaskUserToDB(taskid, userid); // Add input task id + selected name id into DB.user_task table
 		
 		

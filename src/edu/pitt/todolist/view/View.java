@@ -3,6 +3,11 @@ package edu.pitt.todolist.view;
 import java.awt.Dimension;
 import java.awt.List;
 import java.awt.TextField;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -39,17 +44,17 @@ public class View {
 //	    	todoList.add(defaultList.get(i).getDescription());
 //	    }
 	    
-	    userTaskList.setSize(300,400);
-	    listPanel.setBounds(400,50, 250, 300);
+	    userTaskList.setSize(450,400);
+	    listPanel.setBounds(400,50, 450, 300);
 	    listPanel.add(userTaskList);
 	    
 	    panel.add(listPanel);
-	    panel.setBounds(0,0,700,500);
+	    panel.setBounds(0,0,900,500);
 	    
 	    JLabel label1 = new JLabel("Please select users here: ");
 	    label1.setBounds(100, 50, 250, 40);
 	    panel.add(label1);
-	    JComboBox<String> userName = new JComboBox<String>();
+	    this.userName = new JComboBox<String>();
 	    userName.setBounds(100, 100, 250, 40);
 	    userName.addItem("----Select Users----");
 	    for(User user : userList.values()){
@@ -75,7 +80,7 @@ public class View {
 		panel.add(deleteButton);
 	    
 		window.add(panel);
-		window.setSize(700, 500);
+		window.setSize(900, 500);
 		window.setLocationRelativeTo(null);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
@@ -106,14 +111,18 @@ public class View {
 		String selectedString = (String) this.userName.getModel().getSelectedItem();
 		return new Integer(selectedString.split("-")[0]);
 	}
+	
 
 	public void addTaskToList(String name,String description) {
-		//userTaskList.add(description);
 		userTaskList.add(name + ": " + description);
 	}
 	
 	public void addTaskToList(String description) {
 		userTaskList.add(description);
+	}
+	
+	public String getSelectedTask(){
+		return userTaskList.getSelectedItem().split(": ")[1];
 	}
 
 	public void removeFromList(Vector<String> selectedItems) {
